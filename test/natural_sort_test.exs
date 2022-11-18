@@ -119,4 +119,15 @@ defmodule NaturalSortTest do
   test "should pass further sorting tests 7 from https://github.com/versioneye/naturalsorter" do
     assert NaturalSort.sort(["1.5.2-patch", "1.5.2", "1.4.4"]) == ["1.4.4", "1.5.2", "1.5.2-patch"]
   end
+
+  ########################################
+  test "should pass sorting test with tuples and accessor" do
+    assert NaturalSort.sort([{"1.5.2-patch", %{foo: "bar"}}, {"1.5.2", %{bar: "foo"}}, {"1.4.4", %{hello: "world"}}], accessor: &(elem(&1, 0))) == [{"1.4.4", %{hello: "world"}}, {"1.5.2", %{bar: "foo"}}, {"1.5.2-patch", %{foo: "bar"}}]
+  end
+
+  test "should pass sorting test with structs and accessor" do
+    assert NaturalSort.sort([%{version: "1.5.2-patch", foo: "bar"}, %{version: "1.5.2", bar: "foo"}, %{version: "1.4.4", hello: "world"}], accessor: &(&1[:version])) == [%{version: "1.4.4", hello: "world"}, %{version: "1.5.2", bar: "foo"}, %{version: "1.5.2-patch", foo: "bar"}]
+  end
+
+
 end

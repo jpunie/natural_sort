@@ -66,9 +66,10 @@ defmodule NaturalSort do
   def sort(list, options \\ []) do
     direction       = Keyword.get(options, :direction, :asc)
     case_sensitive? = Keyword.get(options, :case_sensitive, false)
+    accessor = Keyword.get(options, :accessor, &(&1))
 
     Enum.sort_by(list,
-                 fn x -> format_item(x, case_sensitive?) end,
+                 fn x -> format_item(accessor.(x), case_sensitive?) end,
                  sort_direction(direction))
   end
 
